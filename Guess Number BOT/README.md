@@ -1,7 +1,7 @@
 # Discord Bot Setup
 To get a bot token go to Discord Developer Portal, create a new application and add a bot.
 
-# Still working on the bot, but feel free to fork and pull request.
+# Created a bot to play a game.
 
 Check out the `guess_number.py` file.  Two things you need is IDE for python interpreter (You might have to install a few things.  Look what I used to import below.) and bot token from Discord Developer Portal.  
 

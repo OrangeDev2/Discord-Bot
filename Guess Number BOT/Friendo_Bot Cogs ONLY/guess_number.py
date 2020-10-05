@@ -3,9 +3,9 @@ import math, random
 from discord.ext.commands import Bot, Cog, command # Comment this out when running this file alone.
 #from discord.ext import commands # Comment this out when this is a part of Cog file.
 
-bot_prefix = "."
+#bot_prefix = "."
 
-client = commands.Bot(command_prefix=bot_prefix)
+#client = commands.Bot(command_prefix=bot_prefix)
 
 class GuessGame(Cog): #(Cog): # Include Cog if it's a part of Cog file in Friendo Bot. Change class name if needed.
     """Commands for Guessing Right Number"""
@@ -62,7 +62,7 @@ class GuessGame(Cog): #(Cog): # Include Cog if it's a part of Cog file in Friend
         brief=" - Type `.start` to start the game.",
         description = " - Type `.start` to get more details on how play the game."
     )
-    async def start(ctx): # No `self` if no Cog.
+    async def start(self, ctx): # No `self` if no Cog.
         await ctx.send(f'Try to guess a random number between {GuessGame.lower_bound}-{GuessGame.upper_bound}.\nType a number after `.guess` command.\nGood Luck!', delete_after=30)
 
 
@@ -70,7 +70,7 @@ class GuessGame(Cog): #(Cog): # Include Cog if it's a part of Cog file in Friend
         brief=" - Enter the number after `.guess` to guess the right number.",
         description = " - Example: `.guess 5` and repeat until you guess it right."
     )
-    async def guess(ctx, guess_number: int): # No `self` if no Cog.
+    async def guess(self, ctx, guess_number: int): # No `self` if no Cog.
         await ctx.send(f'Bounds: {GuessGame.lower_bound}, {GuessGame.upper_bound}') #To see if bounds are set properly.
 
         check_number = GuessGame.check_number
@@ -94,7 +94,7 @@ class GuessGame(Cog): #(Cog): # Include Cog if it's a part of Cog file in Friend
         brief=" - Restart the bot.",
         description=" - Make everything default."
     )
-    async def reset(ctx):
+    async def reset(self, ctx):
         GuessGame.lower_bound = 1
         GuessGame.upper_bound = 10
 

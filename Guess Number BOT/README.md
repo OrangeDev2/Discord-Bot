@@ -8,6 +8,8 @@ Check out the `guess_number.py` file.  Two things you need is IDE for python int
 `What is this?` Play the game with the bot to guess the right number within "n" rounds or you lose.
 
 Commands:
+
+
 .help - Consists of all commands.
 .start - Start a game.  
 .n - This command will be used to enter the number to guess.  

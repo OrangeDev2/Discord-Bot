@@ -1,93 +1,93 @@
 import discord
 import math, random
-from discord.ext import commands
+#from discord.ext.commands import Bot, Cog, command # Comment this out when running this file alone.
+from discord.ext import commands # Comment this out when this is a part of Cog file.
 
-client = commands.Bot(command_prefix = '.')
+bot_prefix = "."
 
-class myClass: # Create class to avoid global on variables
-    # Default bounds unless it's rewritten with .bound command
+client = commands.Bot(command_prefix=bot_prefix)
+
+class GuessGame(): #(Cog): # Include Cog if it's a part of Cog file in Friendo Bot. Change class name if needed.
+    """Commands for Guessing Right Number"""
+
+    #def __init__(self, bot: Bot): # Comment this out when running this file alone.
+    #    self.bot = bot
+
+    # Variables in class GuessGame
     lower_bound = 1
     upper_bound = 10
-    # Just count from # rounds to 0 and game end. Increase by 1 each time .n command is called.
+
+    check_number = round(random.randint(lower_bound, upper_bound))  # Get random number.
+    rounds_number = round(math.log(upper_bound - lower_bound + 1,
+                                   2))  # Get random number of rounds. Like 3 rounds or 3 attempts left to guess.
+
+    # Look in `guess` command below.
     count = 0
 
-    check_number = round(random.randint(lower_bound, upper_bound)) # Random number between lower and upper bounds.
-    rounds_number = round(math.log(upper_bound - lower_bound + 1, 2)) # Random number of rounds like 3 rounds till game end.
+    ##Results in terminal # Comment this out when this is a part of Cog file.
+    @client.event
+    async def on_ready(): # No `self` if no Cog.
+        print('Bot is ready.')
 
-### Results in terminal
-@client.event
-async def on_ready():
-    print('Bot is ready.')
+    ### Commands
+    @client.command(
+        brief="- Use `.bound n1 n2` to set your bound. Use `.bound 0 0` to default bounds.",
+        description = " - `.bound n1 n2`\nn1 => lower_bound, n2 => upper_bound\n Example: `.bound 1 10` will set the bound to 1 and 10.\nEnter `.bound 0 0` to get the default."
+    )
+    # Set up the bounds.  Optional.  (1,10) is the default.
+    async def bound(ctx, lower: int,upper: int): # No `self` if no Cog. Will set bound when called.
+        # Default bounds unless it's rewritten with .bound command
+        lower_bound = 1
+        upper_bound = 10
 
-@client.event
-async def on_member_join(member):
-    print(f'{member} has joined a server.')
+        if lower == 0 or upper == 0: # In case someone want to change it back to default
+            GuessGame.lower_bound = lower_bound
+            GuessGame.upper_bound = upper_bound
+            await ctx.send(f'The bounds are now default. Bounds: {GuessGame.lower_bound} and {GuessGame.upper_bound}.')
+        else:
+            GuessGame.lower_bound = lower
+            GuessGame.upper_bound = upper
 
-async def on_member_remove(member):
-    print(f'{member} has left a server.')
-
-### Commands
-@client.command()
-async def ping(ctx): # write '.ping' to invoke the command.  .ping => ping(ctx)
-    # invoke the command
-    await ctx.send(f'Pong! {round(client.latency * 1000)}ms\nType `.start` to start a game.\nType `.use` to view commands.')
-
-@client.command()
-async def use(ctx):
-    await ctx.send(f'```\n'
-                   '(Help):\n'
-                   f'.start:' '   Start the game\n'
-                   '.n:       Type number to guess\n'
-                   '.ping:    Ring the bot!\n'
-                   '.bound default <=> .bound 1 10\nDefault between 1 and 100 <=> Guess between 1 and 10.\n'
-                   '\n```')
-
-@client.command()
-async def bound(ctx, lower, upper): # Will set bound when called.
-    obj = myClass()
-
-    if lower == 'default': # In case someone want to change it back to default
-        obj.lower_bound = 1
-        obj.upper_bound = 10
-        await ctx.send(f'You entered 1 and 10 as default bounds.')
-    obj.lower_bound = lower
-    obj.upper_bound = upper
-    await ctx.send(f'You entered bounds: {lower} and {upper}')
+        await ctx.send(f'You entered bounds: {GuessGame.lower_bound} and {GuessGame.upper_bound}\nPlease `.start` or `.guess n`')
 
 
-# Give details.
-@client.command()
-async def start(ctx):
-    # Create an object of myClass
-    obj = myClass()
-
-    await ctx.send(f'Try to guess a random number between {obj.lower_bound}-{obj.upper_bound}.\nType a number after `.n` command.\nGood Luck!', delete_after=30)
-
-    #upper = obj.upper_bound
-    #lower = obj.lower_bound
-
-    #check_number = obj.random_number # Random number
-
-    #roundn = obj.rounds_number # Number of rounds
-
-    #count = 0 => Already defined in myClass
-
-@client.command()
-async def n(ctx, guess_number: int):
-    obj = myClass()
-
-    obj.count += 1 # Will add to count = 0 each time this command is called.
-
-    await ctx.send(obj.count)
-
-    if obj.check_number == guess_number:
-        await ctx.send(f'Congratulations you did it! You entered {guess_number}.\nType `.start` to play again or Type `.use` to view commands.')
-    elif obj.check_number > guess_number:
-        await ctx.send(f'You guessed too small!  Try again {obj.rounds_number - obj.count} round(s) pending.', delete_after=30)
-    elif obj.check_number < guess_number:
-        await ctx.send(f'You guessed too high!  Try again. {obj.rounds_number - obj.count} round(s) pending.', delete_after=30)
-    if obj.count >= obj.rounds_number:
-        await ctx.send(f'Sorry! The number is {obj.check_number}. Type `.start` to play again.')
+    # Starting the game...
+    @client.command(
+        brief=" - Type `.start` to start the game.",
+        description = " - Type `.start` to get more details on how play the game."
+    )
+    async def start(ctx): # No `self` if no Cog.
+        await ctx.send(f'Try to guess a random number between {GuessGame.lower_bound}-{GuessGame.upper_bound}.\nType a number after `.guess` command.\nGood Luck!', delete_after=30)
 
 
-# client.run('token')
+    @client.command(
+        brief=" - Enter the number after `.guess` to guess the right number.",
+        description = " - Example: `.guess 5` and repeat until you guess it right."
+    )
+    async def guess(ctx, guess_number: int): # No `self` if no Cog.
+        lower_bound = GuessGame.lower_bound
+        upper_bound = GuessGame.upper_bound
+
+        check_number = GuessGame.check_number
+        rounds_number = GuessGame.rounds_number
+
+        GuessGame.count += 1
+
+        if check_number == guess_number:
+            await ctx.send(f'Congratulations you did it! You entered {guess_number}.\nPlease enter `.reset` to restart the bot. Type `.start` to play again or use `.help` to see options.')
+            GuessGame.count -= count # So we don't bother passing `4th` if statement.
+        elif check_number > guess_number:
+            await ctx.send(f'You guessed too small!  Try again {rounds_number - GuessGame.count} round(s) pending.', delete_after=30)
+        elif check_number < guess_number:
+            await ctx.send(f'You guessed too high!  Try again. {rounds_number - GuessGame.count} round(s) pending.', delete_after=30)
+        if GuessGame.count >= rounds_number:
+            await ctx.send(f'Sorry! The number is {check_number}. Please enter `.reset` to restart the bot. Type `.start` to play again.')
+
+
+#def setup(bot: Bot) -> None:
+#    """Load the Guess_Game cog."""
+#    bot.add_cog(GuessGame(bot))  # # Comment this out when running this file, without Cog, alone.
+
+
+#client.run('token') for test running as a bot with this file alone.  Make sure to do this without `Cog` and `Bot`
+client.run('NzYyMjMwMDc2Nzg3NTIzNjE0.X3mIEw.MnuTTeSrl9T4npLpEaUXQFNywO0')

@@ -3,7 +3,7 @@ To get a bot token go to Discord Developer Portal, create a new application and 
 
 # Still working on the bot, but feel free to fork and pull request.
 
-Check out the `guess_number.py` file.  Two things you need is IDE for python interpreter and bot token from Discord Developer Portal.  
+Check out the `guess_number.py` file.  Two things you need is IDE for python interpreter (You might have to install a few things.  Look what I used to import below.) and bot token from Discord Developer Portal.  
 
 `What is this?` Play the game with the bot to guess the right number within "n" rounds or you lose.
 

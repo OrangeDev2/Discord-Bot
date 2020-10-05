@@ -10,14 +10,16 @@ Check out the `guess_number.py` file.  Two things you need is IDE for python int
 Commands:
 
 
-.help - Consists of all commands.
-.start - Start a game.  
-.n - This command will be used to enter the number to guess.  
-.bound - Between 1 and 10 is default.  This command be used if you'd like to set the bound.
-.ping - Show bot's latency and display `.start` and `.use`
-.use (similar to help)
+`.help` - Consists of all commands.
+`.start` - Start a game.  
+`.n` - This command will be used to enter the number to guess.  
+`.bound` - Between 1 and 10 is default.  This command be used if you'd like to set the bound.
+`.ping` - Show bot's latency and display `.start` and `.use`
+`.use` (similar to help)
 
 Code (Python):
 The code use import `discord, math, random, discord.exe.commands`
 
 Feel free to fork and pull request.
+
+Edited: As of October 4, 2020

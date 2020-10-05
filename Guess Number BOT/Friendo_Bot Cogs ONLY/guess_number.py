@@ -71,7 +71,7 @@ class GuessGame(Cog): #(Cog): # Include Cog if it's a part of Cog file in Friend
         description = " - Example: `.guess 5` and repeat until you guess it right."
     )
     async def guess(self, ctx, guess_number: int): # No `self` if no Cog.
-        await ctx.send(f'Bounds: {GuessGame.lower_bound}, {GuessGame.upper_bound}') #To see if bounds are set properly.
+        await ctx.send(f'Bounds: {GuessGame.lower_bound}, {GuessGame.upper_bound}', delete_after=30) #To see if bounds are set properly.
 
         check_number = GuessGame.check_number
         rounds_number = GuessGame.rounds_number
